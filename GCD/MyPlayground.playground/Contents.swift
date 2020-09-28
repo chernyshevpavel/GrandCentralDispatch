@@ -102,5 +102,35 @@ workItem.isCancelled
 workItem.cancel()
 workItem.isCancelled
 
-workItem.wait()
+//-----------------------------------------------------------
+// Semaphores
 
+let queueSemaphore = DispatchQueue(label: "semaphore", attributes: .concurrent)
+
+let semaphore = DispatchSemaphore(value: 2)
+
+queueSemaphore.async {
+    semaphore.wait(timeout: .distantFuture)
+    Thread.sleep(forTimeInterval: 4)
+    print("block 1")
+    semaphore.signal()
+}
+
+queueSemaphore.async {
+    semaphore.wait(timeout: .distantFuture)
+    Thread.sleep(forTimeInterval: 2)
+    print("block 2")
+    semaphore.signal()
+}
+
+queueSemaphore.async {
+    semaphore.wait(timeout: .distantFuture)
+    print("block 3")
+    semaphore.signal()
+}
+
+queueSemaphore.async {
+    semaphore.wait(timeout: .distantFuture)
+    print("block 4")
+    semaphore.signal()
+}
