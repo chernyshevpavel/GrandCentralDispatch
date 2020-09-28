@@ -85,3 +85,22 @@ print("This print should be above")
 secondGroup.wait()
 
 print("Last print")
+//-----------------------------------------------------------
+// Blocks
+let workItem = DispatchWorkItem(qos: .utility, flags: .detached) {
+    print("performing workitem")
+}
+
+workItem.perform()
+let queueWork = DispatchQueue(label: "ru.swiftbook", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .workItem, target: DispatchQueue.global(qos: .userInitiated))
+queueWork.asyncAfter(deadline: .now() + 1, execute: workItem)
+
+workItem.notify(queue: .main) {
+    print("work item is completed")
+}
+workItem.isCancelled
+workItem.cancel()
+workItem.isCancelled
+
+workItem.wait()
+
