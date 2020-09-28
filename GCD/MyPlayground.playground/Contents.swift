@@ -134,3 +134,22 @@ queueSemaphore.async {
     print("block 4")
     semaphore.signal()
 }
+
+
+//-----------------------------------------------------------
+// sources
+
+let queueSources = DispatchQueue(label: "sources", attributes: .concurrent)
+let timer = DispatchSource.makeTimerSource(queue: queueSources)
+
+timer.schedule(deadline: .now(), repeating: .seconds(2), leeway: .milliseconds(300))
+timer.setEventHandler {
+    print("hello world")
+}
+timer.setCancelHandler {
+    print("timer is canceled")
+
+}
+
+
+timer.resume()
